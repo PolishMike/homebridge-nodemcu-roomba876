@@ -1,22 +1,17 @@
-## This project is not being actively updated. Please feel free to create a fork and develop extra functionality!
+## This project is to add iRobot roomba 876 controlls (with no WiFi and native app) to Apple Home.
 
-[![npm version](https://badge.fury.io/js/homebridge-roomba690.svg)](http://badge.fury.io/js/homebridge-roomba690)
-
-homebridge-roomba690
+homebridge-nodemcu-roomba876
 =========
 
-This Homebridge plugin adds support for the Roomba 690.
-
-It also adds a BatteryService, allowing you to check on the charging status of the 690.
+This Homebridge plugin adds switch, battery level and charge status intrefaces with REAT API calls underneath.
+API calls go to nodemcu (esp8266) WiFi microcontroller connected to iRobot roomba to read its status and control it.
 
 ## Credits
 
 This code was built upon the work in the following projects:
 
 * [homebridge](https://github.com/nfarina/homebridge)
-* [dorita980](https://github.com/koalazak/dorita980)
-* [homebridge-roomba980](https://github.com/steedferns/homebridge-roomba980)
-* [homebridge-roomba](https://github.com/umesan/homebridge-roomba)
+* [homebridge-roomba690](https://github.com/gbro115/homebridge-roomba690)
 
 ## Features
 
@@ -24,9 +19,6 @@ This code was built upon the work in the following projects:
 * Check on/off status *Hey Siri, is the Roomba on?*
 * Check charging status *Hey Siri, is the Roomba charging?*
 * Check battery status *Hey Siri, is the Roomba charged?*
-
-![roomba690-turn-on-roomba](https://i.imgur.com/0QTFQ6Ol.png)
-![roomba690-home-app-details](https://i.imgur.com/EnX2fOCl.png)
 
 ## Installation
 
@@ -51,67 +43,15 @@ Add to your config.json's accessory section:
 
     "accessories": [
 	{
-	    "accessory": "Roomba690",
-	    "model":"690",            
+	    "accessory": "Roomba876",
+	    "model":"876",
 	    "name": "Roomba",
-	    "hostname": "ip-address-of-your-roomba",            
-	    "blid":"blid-of-your-roomba",
-	    "password":"password-for-your-roomba"
+	    "hostname": "ip-address-of-your-nodemcu",
 	}
     ]
 }
 ```
-To obtain your BLID and Password for your Roomba, refer to [dorita980](https://github.com/koalazak/dorita980#how-to-get-your-usernameblid-and-password)
 
 The Model and Name options can be set to whatever you'd like.
 
-## Advice
-
-As pointed out in the Readme for [dorita980](https://github.com/koalazak/dorita980), it is wise to disable over-the-air firmware updates for your Roomba.
-
-## Why another Roomba plugin?
-
-Unfortunately, the [homebridge-roomba980](https://github.com/steedferns/homebridge-roomba980) or [homebridge-roomba](https://github.com/umesan/homebridge-roomba) plugins don't work with the Roomba 690.
-
-The 690 has a limited feature set in comparison to the higher-end models, a consequence being that it doesn't support some of the methods that these two plugins use from the dorita980 kit.
-
-This plugin uses methods that the 690 does support in order to bring Homebridge support to your Roomba.
-
-## Logging and Troubleshooting
-
-Logging is fairly verbose and should assist you in troubleshooting any issues. Look in your usual Homebridge logs.
-
-Make sure that the plugin is actually being loaded:
-
-```
-Loaded plugin: homebridge-roomba690
-Registering accessory 'homebridge-roomba690.Roomba690'
-```
-
-Verify that your configuration is correct:
-
-```
-[Roomba] Initializing Roomba690 accessory...
-[Roomba] Initialised Roomba with Name: [Roomba] Hostname: [192.168.0.239] BLID: [XXXXXXXXXXXX] Model: [690]
-[Roomba] Services requested
-[Roomba] Reporting that we support AccessoryInformation, SwitchService and BatteryService
-```
-
-Whenever you request information, you should see activity in the logs
-
-*Hey Siri, is the Roomba on?*
-
-```
-[Roomba] Power state requested for Roomba
-[Roomba] Connected to Roomba
-[Roomba] Status is [charge]
-[Roomba] Roomba is not running
-```
-
-*Hey Siri, is the Roomba battery charged?*
-
-```
-[Roomba] Battery level requested for Roomba
-[Roomba] Connected
-[Roomba] Roomba battery level [100]
-```
+TBD...
