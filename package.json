@@ -1,7 +1,7 @@
 {
-  "name": "homebridge-roomba690",
-  "version": "0.1.0",
-  "description": "Roomba690 for Homebridge",
+  "name": "homebridge-nodemcu-roomba876",
+  "version": "0.1.1",
+  "description": "Roomba876 for Homebridge via nodemcu",
   "keywords": [
     "homebridge-plugin"
   ],
@@ -14,9 +14,7 @@
   },
    "repository": {
     "type": "git",
-    "url": "git://github.com/gbro115/homebridge-roomba690.git"
-  }, 
-  "dependencies": {
-    "dorita980": "3.0.6"
-  }
+    "url": "git@github.com:yaro-m/homebridge-nodemcu-roomba876.git"
+  },
+  "dependencies": {}
 }

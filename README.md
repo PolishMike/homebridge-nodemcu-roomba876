@@ -13,6 +13,12 @@ This code was built upon the work in the following projects:
 * [homebridge](https://github.com/nfarina/homebridge)
 * [homebridge-roomba690](https://github.com/gbro115/homebridge-roomba690)
 
+## Hardware requirements
+
+* iRobot romba without WiFi capabilities
+* Raspberry Pi or any other Mac/PC to host [homebridge](https://github.com/nfarina/homebridge) software
+* Nodemcu microcontroller to run HTTP REST API server and proxy homebrdge commands to roomba
+
 ## Features
 
 * Start / stop Roomba *Hey Siri, turn on the Roomba*
@@ -22,7 +28,7 @@ This code was built upon the work in the following projects:
 
 ## Installation
 
-`npm install -g homebridge-roomba690`
+`npm install -g homebridge-nodemcu-roomba876`
 
 ## Homebridge configuration
 
@@ -46,12 +52,11 @@ Add to your config.json's accessory section:
 	    "accessory": "Roomba876",
 	    "model":"876",
 	    "name": "Roomba",
-	    "hostname": "ip-address-of-your-nodemcu",
+	    "hostname": "http://mdns-host-or-ip-address-of-your-roomba-nodemcu",
 	}
     ]
 }
 ```
 
 The Model and Name options can be set to whatever you'd like.
-
-TBD...
+Hostname is an IP address of nodemcu's microcontroller of its mDNS host name if used
