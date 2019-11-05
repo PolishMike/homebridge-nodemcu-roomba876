@@ -1,16 +1,15 @@
 var Service, Characteristic;
-var dorita980 = require('dorita980');
 
 module.exports = function(homebridge) {
     Service = homebridge.hap.Service;
     Characteristic = homebridge.hap.Characteristic;
-    homebridge.registerAccessory("homebridge-roomba690", "Roomba690", Roomba690Accessory);
+    homebridge.registerAccessory("homebridge-nodemcu-roomba876", "Roomba876", Roomba876Accessory);
 }
 
 /**
- * Roomba690Accessory
+ * Roomba876Accessory
  *
- * @method Roomba690Accessory 
+ * @method Roomba876Accessory 
  * @param {Object} log
  * @param {Object} config config.json
  * @param {String} config.name Name of Roomba to show in Home app
@@ -20,21 +19,18 @@ module.exports = function(homebridge) {
  * @param {String} config.model Model of Roomba to show in Home app
  *
  */
-function Roomba690Accessory(log, config) {
+function Roomba876Accessory(log, config) {
 
     this.log = log;
-
-    this.blid       = config["blid"];
-    this.password   = config["password"];
     this.name       = config["name"];
     this.hostname   = config["hostname"];
     this.model      = config["model"];
 
-    log("Initialised Roomba with Name: [%s] Hostname: [%s] BLID: [%s] Model: [%s]", this.name, this.hostname, this.blid, this.model);
+    log("Initialised Roomba with Name: [%s] Hostname: [%s] Model: [%s]", this.name, this.hostname, this.model);
 }
 
 /**
- * Roomba690Accessory
+ * Roomba876Accessory
  *
  * Provides the following functions:
  * setPowerState()
@@ -44,7 +40,7 @@ function Roomba690Accessory(log, config) {
  * identify()
  * getServices()
  */
-Roomba690Accessory.prototype = {
+Roomba876Accessory.prototype = {
 
   /**
    * setPowerState
@@ -61,8 +57,6 @@ Roomba690Accessory.prototype = {
         var log = this.log;
 
         log("Request to set power state to [%s]", state);
-
-        var myRobotViaLocal = new dorita980.Local(this.blid, this.password, this.hostname);
         
         if (state) {
 
@@ -180,8 +174,6 @@ Roomba690Accessory.prototype = {
 
         var log = this.log;
         log("Power state requested for Roomba");
-
-        var myRobotViaLocal = new dorita980.Local(this.blid, this.password, this.hostname);
 
         myRobotViaLocal.on('connect', function() {
 
@@ -332,7 +324,7 @@ Roomba690Accessory.prototype = {
   /**
    * getServices
    *
-   * Roomba690 supports the following Services:
+   * Roomba876 supports the following Services:
    * AccessoryInformation
    * BatteryService
    * Switch
