@@ -1,6 +1,6 @@
 {
   "name": "homebridge-nodemcu-roomba876",
-  "version": "0.1.1",
+  "version": "0.1.13",
   "description": "Roomba876 for Homebridge via nodemcu",
   "keywords": [
     "homebridge-plugin"
@@ -12,9 +12,11 @@
   "author": {
     "name": "gbro115"
   },
-   "repository": {
+  "repository": {
     "type": "git",
     "url": "git@github.com:yaro-m/homebridge-nodemcu-roomba876.git"
   },
-  "dependencies": {}
+  "dependencies": {
+    "node-fetch": "^2.6.0"
+  }
 }

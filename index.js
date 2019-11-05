@@ -1,5 +1,7 @@
 var Service, Characteristic;
 
+const fetch = require('node-fetch');
+
 module.exports = function(homebridge) {
     Service = homebridge.hap.Service;
     Characteristic = homebridge.hap.Characteristic;
@@ -61,7 +63,7 @@ Roomba876Accessory.prototype = {
         if (state) {
             log("Starting roomba...");
 
-            fetch(`${this.hostname}/start`)
+            fetch(`${this.hostname}/clean`)
                 .then(response => response.json())
                 .then(data => {
                     log("Roomba started");
