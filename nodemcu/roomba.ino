@@ -151,7 +151,15 @@ void setup() {
 
   // "status" route handler, send "power status", "charging status" and "battery level" JSON back
   server.on("/status", []() {
-    server.send(200, "application/json", "{\"status\": " + (getRoombaChargingState()) ? 1 : 0 + ", \"is_charging\": " + (getRoombaChargingState()) ? "true" : "false" + ", \"battery_level\": " + getRoombaBatteryLevel() + "}");
+    string status = "0";
+    string is_charging = "\"false\"";
+
+    if (getRoombaChargingState()) {
+      status = "1";
+      is_charging = "\"true\"";
+    }
+
+    server.send(200, "application/json", "{\"status\": " + status + ", \"is_charging\": " + is_charging + ", \"battery_level\": " + getRoombaBatteryLevel() + "}");
   });
 
   // Start HTTP server
