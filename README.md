@@ -37,23 +37,20 @@ Add to your config.json's accessory section:
 ```
 {
     "bridge": {
-	"name": "Homebridge",
-	"username": "CD:22:3D:E3:CE:30",
-	"port": 51826,
-	"pin": "123-45-678"
+		"name": "Homebridge",
+		"username": "CD:22:3D:E3:CE:30",
+		"port": 51826,
+		"pin": "123-45-678"
     },
-
     "description": "My Homebridge",
-
     "platforms": [],
-
     "accessories": [
-	{
-	    "accessory": "Roomba876",
-	    "model":"876",
-	    "name": "Roomba",
-	    "hostname": "http://mdns-host-or-ip-address-of-your-roomba-nodemcu",
-	}
+		{
+			"accessory": "Roomba876",
+			"model":"876",
+			"name": "Roomba",
+			"hostname": "http://mdns-host-or-ip-address-of-your-roomba-nodemcu",
+		}
     ]
 }
 ```
