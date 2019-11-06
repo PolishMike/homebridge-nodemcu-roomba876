@@ -67,12 +67,14 @@ Hostname is an IP address of nodemcu's microcontroller or its mDNS host name use
 
 This is separate hardware to listen on host/IP with REST interface accepting API calls from this homebridge plugin.
 
-It should be developed and flashed separately from this plugin.
+It should be developed and flashed separately from this plugin. You can use Arduino IDE to develop and flash it.
 
 It passes commands from homebridge/Siri to roomba over open interface port (OI).
 
-### Arduino IDE code snipet
+### Source
 
-```
+Source is located in `nodemcu` folder of this project. But rest of the routine is up to you.
+
+### Wiring
+
 TBD
-```
