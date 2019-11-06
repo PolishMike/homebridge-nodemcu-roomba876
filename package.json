@@ -1,7 +1,7 @@
 {
   "name": "homebridge-nodemcu-roomba876",
-  "version": "0.1.13",
-  "description": "Roomba876 for Homebridge via nodemcu",
+  "version": "0.1.14",
+  "description": "Roomba876 for Homebridge via nodemcu microcontroller",
   "keywords": [
     "homebridge-plugin"
   ],
@@ -10,7 +10,7 @@
     "homebridge": ">=0.2.0"
   },
   "author": {
-    "name": "gbro115"
+    "name": "yaro-m"
   },
   "repository": {
     "type": "git",

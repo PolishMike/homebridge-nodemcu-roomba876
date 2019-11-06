@@ -15,8 +15,6 @@ module.exports = function(homebridge) {
  * @param {Object} log
  * @param {Object} config config.json
  * @param {String} config.name Name of Roomba to show in Home app
- * @param {String} config.blid Roomba's BLID
- * @param {String} config.password Roomba's password
  * @param {String} config.hostname Roomba's IP address
  * @param {String} config.model Model of Roomba to show in Home app
  *
