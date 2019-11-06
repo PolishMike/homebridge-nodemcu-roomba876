@@ -3,14 +3,14 @@
 #include <ESP8266WebServer.h>
 #include <Roomba.h>
 
-//#define BAUD_PIN D3
+#define BAUD_PIN D3
 #define SSID "ssid"
 #define PSK "psk"
 
 #define OI_DELAY 50
 #define MAIN_LOOP_DELAY 10
 #define WIFI_DELAY 500
-//#define WAKEUP_DELAY 1000
+#define WAKEUP_DELAY 1000
 
 #define MDNS_NAME "nodemcu-roomba"
 #define HTTP_PORT 80
@@ -19,7 +19,7 @@
 #define OI_STOP 133
 #define OI_DOCK 143
 #define OI_START 128
-//#define OI_SAFE_MODE 131
+#define OI_SAFE_MODE 131
 #define OI_CHARGING_STATE 21
 #define OI_BATTERY_CHARGE 25
 #define OI_BATTERY_CAPACITY 26
@@ -36,15 +36,15 @@ void send_oi_serial_command(int command) {
   delay(OI_DELAY);
 }
 
-// void wake_up_roomba() {
-//   // Toggle BAUD_PIN to wake up roomba in case it sleeps
-//   digitalWrite(BAUD_PIN, HIGH);
-//   delay(OI_DELAY);
-//   digitalWrite(BAUD_PIN, LOW);
+void wake_up_roomba() {
+  // Toggle BAUD_PIN to wake up roomba in case it sleeps
+  digitalWrite(BAUD_PIN, HIGH);
+  delay(OI_DELAY);
+  digitalWrite(BAUD_PIN, LOW);
 
-//   // Wait to let it wake up before sending commands
-//   delay(WAKEUP_DELAY);
-// }
+  // Wait to let it wake up before sending commands
+  delay(WAKEUP_DELAY);
+}
 
 // Sends "start" OI command to roomba
 void start_oi() {
@@ -52,36 +52,38 @@ void start_oi() {
 }
 
 // Sends "safe mode" OI command to roomba
-//void roomba_safe_mode() {
-//  send_oi_serial_command(OI_SAFE_MODE)
-//}
+void roomba_safe_mode() {
+ send_oi_serial_command(OI_SAFE_MODE)
+}
 
 // Sends "clean" OI command to roomba
 void startCleaning() {
-  //wake_up_roomba();
+  wake_up_roomba();
   start_oi();
-  //roomba_safe_mode();
+  roomba_safe_mode();
   send_oi_serial_command(OI_CLEAN);
 }
 
 // Sends "stop" OI command to roomba
 void stopCleaning() {
-  //wake_up_roomba();
+  wake_up_roomba();
   start_oi();
-  //roomba_safe_mode();
+  roomba_safe_mode();
   send_oi_serial_command(OI_STOP);
 }
 
 // Sends "seek dock" OI command to roomba
 void toDock() {
-  //wake_up_roomba();
+  wake_up_roomba();
   start_oi();
-  //roomba_safe_mode();
+  roomba_safe_mode();
   send_oi_serial_command(OI_DOCK);
 }
 
 float getRoombaBatteryLevel() {
+  wake_up_roomba();
   start_oi();
+  roomba_safe_mode();
 
   uint8_t tempBuf[10];
 
@@ -100,7 +102,9 @@ float getRoombaBatteryLevel() {
 }
 
 bool getRoombaChargingState() {
+  wake_up_roomba();
   start_oi();
+  roomba_safe_mode();
 
   uint8_t tempBuf[10];
 
@@ -116,6 +120,10 @@ bool getRoombaChargingState() {
 }
 
 void setup() {
+  // Init BAUD_PIN
+  pinMode(BAUD_PIN, OUTPUT);
+  digitalWrite(BAUD_PIN, LOW);
+
   // Start serial and baud rate to match roomba baud rate
   Serial.begin(115200);
 
