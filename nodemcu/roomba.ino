@@ -18,6 +18,7 @@
 #define OI_CLEAN 135
 #define OI_STOP 133
 #define OI_DOCK 143
+#define OI_STOP 173
 #define OI_START 128
 #define OI_SAFE_MODE 131
 #define OI_CHARGING_STATE 21
@@ -56,6 +57,11 @@ void roomba_safe_mode() {
  send_oi_serial_command(OI_SAFE_MODE)
 }
 
+// Sends "stop" OI command to roomba
+void roomba_stop() {
+ send_oi_serial_command(OI_STOP)
+}
+
 // Sends "clean" OI command to roomba
 void startCleaning() {
   wake_up_roomba();
@@ -64,20 +70,15 @@ void startCleaning() {
   send_oi_serial_command(OI_CLEAN);
 }
 
-// Sends "stop" OI command to roomba
-void stopCleaning() {
-  wake_up_roomba();
-  start_oi();
-  roomba_safe_mode();
-  send_oi_serial_command(OI_STOP);
-}
-
 // Sends "seek dock" OI command to roomba
 void toDock() {
   wake_up_roomba();
   start_oi();
   roomba_safe_mode();
   send_oi_serial_command(OI_DOCK);
+
+  // Set mode to "passive"
+  start_oi();
 }
 
 float getRoombaBatteryLevel() {
@@ -145,11 +146,13 @@ void setup() {
 
   // "clean" route handler, just send empty JSON back
   server.on("/clean", []() {
+    startCleaning();
     server.send(200, "application/json", "{}");
   });
 
   // "dock" route handler, just send empty JSON back
   server.on("/dock", []() {
+    toDock();
     server.send(200, "application/json", "{}");
   });
 
