@@ -159,7 +159,7 @@ void setup() {
       is_charging = "\"true\"";
     }
 
-    server.send(200, "application/json", "{\"status\": " + status + ", \"is_charging\": " + is_charging + ", \"battery_level\": " + getRoombaBatteryLevel() + "}");
+    server.send(200, "application/json", "{\"status\": " + status + ", \"is_charging\": " +  + ", \"battery_level\": " + String(getRoombaBatteryLevel()) + "}");
   });
 
   // Start HTTP server
