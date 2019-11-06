@@ -1,3 +1,4 @@
+#include <string>
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 #include <ESP8266WebServer.h>
@@ -48,7 +49,7 @@ void send_oi_serial_command(int command) {
 
 // Sends "start" OI command to roomba
 void start_oi() {
-  send_oi_serial_command(OI_START)
+  send_oi_serial_command(OI_START);
 }
 
 // Sends "safe mode" OI command to roomba
@@ -116,10 +117,6 @@ bool getRoombaChargingState() {
 }
 
 void setup() {
-  // Init BAUD_PIN
-  pinMode(BAUD_PIN, OUTPUT);
-  digitalWrite(BAUD_PIN, LOW);
-
   // Start serial and baud rate to match roomba baud rate
   Serial.begin(115200);
 
