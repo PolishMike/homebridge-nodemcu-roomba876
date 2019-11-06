@@ -1,4 +1,3 @@
-#include <string>
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 #include <ESP8266WebServer.h>
@@ -148,15 +147,7 @@ void setup() {
 
   // "status" route handler, send "power status", "charging status" and "battery level" JSON back
   server.on("/status", []() {
-    string status = "0";
-    string is_charging = "\"false\"";
-
-    if (getRoombaChargingState()) {
-      status = "1";
-      is_charging = "\"true\"";
-    }
-
-    server.send(200, "application/json", "{\"status\": " + status + ", \"is_charging\": " +  + ", \"battery_level\": " + String(getRoombaBatteryLevel()) + "}");
+    server.send(200, "application/json", "{\"status\": " + (getRoombaChargingState()) ? String(1) : String(0) + ", \"is_charging\": " + String(getRoombaChargingState()) + ", \"battery_level\": " + String(getRoombaBatteryLevel()) + "}");
   });
 
   // Start HTTP server
