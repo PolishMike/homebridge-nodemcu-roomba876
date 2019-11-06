@@ -1,4 +1,4 @@
-## This project is to add iRobot roomba 876 or others without smart/WiFi capabilities controlls over Apple Home.
+## This project is to add iRobot roomba 876 (or others without smart/WiFi capabilities) controlls over Apple Home.
 
 [![npm version](https://badge.fury.io/js/homebridge-nodemcu-roomba876.svg)](https://badge.fury.io/js/homebridge-nodemcu-roomba876)
 
