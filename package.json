@@ -1,6 +1,6 @@
 {
   "name": "homebridge-nodemcu-roomba876",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "Roomba876 for Homebridge via nodemcu microcontroller",
   "keywords": [
     "homebridge-plugin"

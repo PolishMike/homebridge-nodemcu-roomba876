@@ -7,7 +7,7 @@
 #define PSK "psk"
 
 #define OI_DELAY 50
-#define MAIN_LOOP_DELAY 100
+#define MAIN_LOOP_DELAY 10
 #define WIFI_DELAY 500
 #define WAKEUP_DELAY 1000
 
@@ -20,14 +20,17 @@
 #define OI_START 128
 #define OI_SAFE_MODE 131
 
+// Init HTTP server
+ESP8266WebServer server(HTTP_PORT);
+
+// Sends OI serial sequence command to roomba
 void send_oi_serial_command(int command) {
-  // Send OI serial command
   Serial.write(command);
   delay(OI_DELAY);
 }
 
 void wake_up_roomba() {
-  // Trigger BAUD_PIN to wake up roomba
+  // Toggle BAUD_PIN to wake up roomba in case it sleeps
   digitalWrite(BAUD_PIN, HIGH);
   delay(OI_DELAY);
   digitalWrite(BAUD_PIN, LOW);
@@ -36,22 +39,25 @@ void wake_up_roomba() {
   delay(WAKEUP_DELAY);
 }
 
+// Sends "start" OI command to roomba
 void start_oi() {
   send_oi_serial_command(OI_START)
 }
 
+// Sends "safe mode" OI command to roomba
 void roomba_safe_mode() {
   send_oi_serial_command(OI_SAFE_MODE)
 }
 
+// Sends "clean" OI command to roomba
 void startCleaning() {
   wake_up_roomba();
   start_oi();
   roomba_safe_mode();
-
   send_oi_serial_command(OI_CLEAN);
 }
 
+// Sends "stop" OI command to roomba
 void stopCleaning() {
   wake_up_roomba();
   start_oi();
@@ -59,6 +65,7 @@ void stopCleaning() {
   send_oi_serial_command(OI_STOP);
 }
 
+// Sends "seek dock" OI command to roomba
 void toDock() {
   wake_up_roomba();
   start_oi();
@@ -85,20 +92,22 @@ void setup() {
   // Start mDNS
   MDNS.begin(MDNS_NAME);
 
-  ESP8266WebServer server(HTTP_PORT);
-
+  // Not found route handler, just send 404 with some text
   server.onNotFound([]() {
     server.send(404, "text/html", "Not Found!");
   });
 
+  // "clean" route handler, just send empty JSON back
   server.on("/clean", []() {
     server.send(200, "application/json", "{}");
   });
 
+  // "dock" route handler, just send empty JSON back
   server.on("/dock", []() {
     server.send(200, "application/json", "{}");
   });
 
+  // "status" route handler, send "power status", "charging status" and "battery level" JSON back
   server.on("/status", []() {
     server.send(200, "application/json", "{\"status\": 1, \"is_charging\": true, \"battery_level\": 100.00}");
   });
