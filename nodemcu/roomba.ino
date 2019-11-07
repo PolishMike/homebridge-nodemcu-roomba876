@@ -1,5 +1,4 @@
 #include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
 #include <ESP8266WebServer.h>
 #include <Roomba.h>
 
@@ -8,11 +7,10 @@
 #define PSK "psk"
 
 #define OI_DELAY 50
-#define MAIN_LOOP_DELAY 10
+#define MAIN_LOOP_DELAY 1
 #define WIFI_DELAY 500
 #define WAKEUP_DELAY 1000
 
-#define MDNS_NAME "nodemcu-roomba"
 #define HTTP_PORT 80
 
 #define OI_CLEAN 135
@@ -54,12 +52,7 @@ void start_oi() {
 
 // Sends "safe mode" OI command to roomba
 void roomba_safe_mode() {
- send_oi_serial_command(OI_SAFE_MODE)
-}
-
-// Sends "stop" OI command to roomba
-void roomba_stop() {
- send_oi_serial_command(OI_STOP)
+ send_oi_serial_command(OI_SAFE_MODE);
 }
 
 // Sends "clean" OI command to roomba
@@ -136,9 +129,6 @@ void setup() {
     delay(WIFI_DELAY);
   }
 
-  // Start mDNS
-  MDNS.begin(MDNS_NAME);
-
   // Not found route handler, just send 404 with some text
   server.onNotFound([]() {
     server.send(404, "text/html", "Not Found!");
@@ -167,7 +157,5 @@ void setup() {
 
 void loop() {
   server.handleClient();
-  MDNS.update();
-
   delay(MAIN_LOOP_DELAY);
 }
