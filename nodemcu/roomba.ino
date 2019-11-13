@@ -10,7 +10,7 @@
 #define OI_DELAY 50
 #define MAIN_LOOP_DELAY 1
 #define WIFI_DELAY 500
-#define BAUD_TRIGGER_DELAY 2000
+#define BAUD_TRIGGER_DELAY 50
 
 #define MDNS_NAME "nodemcu-roomba"
 #define HTTP_PORT 80
@@ -41,9 +41,9 @@ void send_oi_serial_command(int command) {
 
 void wake_up_roomba() {
   // Toggle BAUD_PIN to wake up roomba in case it sleeps
-  digitalWrite(BAUD_PIN, LOW);
-  delay(BAUD_TRIGGER_DELAY);
   digitalWrite(BAUD_PIN, HIGH);
+  delay(BAUD_TRIGGER_DELAY);
+  digitalWrite(BAUD_PIN, LOW);
   delay(BAUD_TRIGGER_DELAY);
 }
 
@@ -71,6 +71,14 @@ void toDock() {
   start_oi();
   roomba_safe_mode();
   send_oi_serial_command(OI_DOCK);
+}
+
+// Sends "stop" OI command to roomba
+void stopRoomba() {
+  wake_up_roomba();
+  start_oi();
+  roomba_safe_mode();
+  send_oi_serial_command(OI_STOP);
 }
 
 float getRoombaBatteryLevel() {
@@ -105,7 +113,7 @@ bool getRoombaChargingState() {
 void setup() {
   // Init BAUD_PIN
   pinMode(BAUD_PIN, OUTPUT);
-  digitalWrite(BAUD_PIN, HIGH);
+  digitalWrite(BAUD_PIN, LOW);
 
   // Start serial and baud rate to match roomba default baud rate
   Serial.begin(115200);
@@ -135,6 +143,12 @@ void setup() {
   // "dock" route handler, just send empty JSON back
   server.on("/dock", []() {
     toDock();
+    server.send(200, "application/json", "{}");
+  });
+
+  // "stop" route handler, just send empty JSON back
+  server.on("/stop", []() {
+    stopRoomba();
     server.send(200, "application/json", "{}");
   });
 

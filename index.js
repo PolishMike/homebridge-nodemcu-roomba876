@@ -8,6 +8,8 @@ module.exports = function(homebridge) {
     homebridge.registerAccessory("homebridge-nodemcu-roomba876", "Roomba876", Roomba876Accessory);
 }
 
+var roomba_state = 0;
+
 /**
  * Roomba876Accessory
  *
@@ -61,6 +63,8 @@ Roomba876Accessory.prototype = {
         if (state) {
             log("Starting roomba...");
 
+            roomba_state = 1;
+
             fetch(`${this.hostname}/clean`)
                 .then(response => response.json())
                 .then(data => {
@@ -75,6 +79,8 @@ Roomba876Accessory.prototype = {
                 });
         } else {
             log("Docking roomba...");
+
+            roomba_state = 0;
 
             fetch(`${this.hostname}/dock`)
                 .then(response => response.json())
@@ -107,18 +113,7 @@ Roomba876Accessory.prototype = {
 
         log("Power state requested for Roomba");
 
-        fetch(`${this.hostname}/status`)
-            .then(response => response.json())
-            .then(data => {
-                log(`Roomba status is ${data.status}`);
-                log(data);
-                callback(null, data.status);
-            })
-            .catch(err => {
-                log("Failed to get roomba status");
-                log(err);
-                callback(err);
-            });
+        callback(null, roomba_state);
     },
 
     /**
