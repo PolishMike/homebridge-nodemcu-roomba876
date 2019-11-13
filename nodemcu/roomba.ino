@@ -1,4 +1,5 @@
 #include <ESP8266WiFi.h>
+#include <ESP8266mDNS.h>
 #include <ESP8266WebServer.h>
 #include <Roomba.h>
 
@@ -9,8 +10,9 @@
 #define OI_DELAY 50
 #define MAIN_LOOP_DELAY 1
 #define WIFI_DELAY 500
-#define WAKEUP_DELAY 1000
+#define BAUD_TRIGGER_DELAY 2000
 
+#define MDNS_NAME "nodemcu-roomba"
 #define HTTP_PORT 80
 
 #define OI_CLEAN 135
@@ -29,6 +31,8 @@ ESP8266WebServer server(HTTP_PORT);
 // Init roomba sensors object
 Roomba roomba(&Serial, Roomba::Baud115200);
 
+uint8_t tempBuf[52];
+
 // Sends OI serial sequence command to roomba
 void send_oi_serial_command(int command) {
   Serial.write(command);
@@ -37,12 +41,10 @@ void send_oi_serial_command(int command) {
 
 void wake_up_roomba() {
   // Toggle BAUD_PIN to wake up roomba in case it sleeps
-  digitalWrite(BAUD_PIN, HIGH);
-  delay(OI_DELAY);
   digitalWrite(BAUD_PIN, LOW);
-
-  // Wait to let it wake up before sending commands
-  delay(WAKEUP_DELAY);
+  delay(BAUD_TRIGGER_DELAY);
+  digitalWrite(BAUD_PIN, HIGH);
+  delay(BAUD_TRIGGER_DELAY);
 }
 
 // Sends "start" OI command to roomba
@@ -69,18 +71,10 @@ void toDock() {
   start_oi();
   roomba_safe_mode();
   send_oi_serial_command(OI_DOCK);
-
-  // Set mode to "passive"
-  start_oi();
 }
 
 float getRoombaBatteryLevel() {
-  wake_up_roomba();
-  start_oi();
-  roomba_safe_mode();
-
-  uint8_t tempBuf[10];
-
+  roomba.start();
   roomba.getSensors(OI_BATTERY_CHARGE, tempBuf, 2);
   long battery_current_mAh = tempBuf[1] + 256 * tempBuf[0];
   delay(OI_DELAY);
@@ -96,14 +90,9 @@ float getRoombaBatteryLevel() {
 }
 
 bool getRoombaChargingState() {
-  wake_up_roomba();
-  start_oi();
-  roomba_safe_mode();
-
-  uint8_t tempBuf[10];
-
+  roomba.start();
   roomba.getSensors(OI_CHARGING_STATE, tempBuf, 1);
-  int charging_state = tempBuf[1] + 256 * tempBuf[0];
+  int charging_state = tempBuf[0];
   delay(OI_DELAY);
 
   if (charging_state != 0) {
@@ -116,9 +105,9 @@ bool getRoombaChargingState() {
 void setup() {
   // Init BAUD_PIN
   pinMode(BAUD_PIN, OUTPUT);
-  digitalWrite(BAUD_PIN, LOW);
+  digitalWrite(BAUD_PIN, HIGH);
 
-  // Start serial and baud rate to match roomba baud rate
+  // Start serial and baud rate to match roomba default baud rate
   Serial.begin(115200);
 
   // Connect to WiFi
@@ -128,6 +117,9 @@ void setup() {
   while (WiFi.status() != WL_CONNECTED) {
     delay(WIFI_DELAY);
   }
+
+  // Start mDNS
+  MDNS.begin(MDNS_NAME);
 
   // Not found route handler, just send 404 with some text
   server.onNotFound([]() {
@@ -148,7 +140,7 @@ void setup() {
 
   // "status" route handler, send "power status", "charging status" and "battery level" JSON back
   server.on("/status", []() {
-    server.send(200, "application/json", "{\"status\": " + ((getRoombaChargingState()) ? String(1) : String(0)) + ", \"is_charging\": " + ((getRoombaChargingState()) ? String("true") : String("false")) + ", \"battery_level\": " + String(getRoombaBatteryLevel()) + "}");
+    server.send(200, "application/json", "{\"status\": 0, \"is_charging\": false, \"battery_level\": 100.00}");
   });
 
   // Start HTTP server
@@ -157,5 +149,6 @@ void setup() {
 
 void loop() {
   server.handleClient();
+  MDNS.update();
   delay(MAIN_LOOP_DELAY);
 }
