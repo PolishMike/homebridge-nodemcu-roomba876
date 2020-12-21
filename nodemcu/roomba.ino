@@ -12,7 +12,7 @@
 #define WIFI_DELAY 500
 #define BAUD_TRIGGER_DELAY 50
 
-#define MDNS_NAME "nodemcu-roomba"
+#define MDNS_NAME "roomba"
 #define HTTP_PORT 80
 
 #define OI_CLEAN 135

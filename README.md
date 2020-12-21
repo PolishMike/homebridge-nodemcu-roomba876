@@ -77,4 +77,15 @@ Source is located in `nodemcu` folder of this project. But rest of the routine i
 
 ### Wiring
 
-TBD
+Connections from Roomba to Wemos D1 mini:
+Soldered directly onto Roomba motherboard. 
+Roomba Gnd and Batt terminals are located near the center of the mainboard.
+Feeding those through a buck converter to Wemos GND and 3.3V pins.
+
+Roomba serial pin 5 - soldered to C259 - D3 on Wemos (Device Detect pin)
+Roomba serial pin 3 - soldered on C258 - TX on Wemos (Roomba RXD)
+Roomba serial pin 4 - sodlered on C261 - RX on Wemox (Roomba TXD)
+
+Flasing the Wemos with Arduino kept faining until I set the flash baud rate to 115200. 
+
+
